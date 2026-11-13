@@ -1,0 +1,25 @@
+symbol,name,shares,sector,statement_price
+ABT,Abbott Laboratories,375,Health Care,106.20
+ABBV,AbbVie,225,Health Care,294.89
+GOOGL,Alphabet Class A,400,Information Technology,279.84
+AMZN,Amazon,400,Consumer Discretionary,240.35
+AAPL,Apple,125,Information Technology,344.63
+BRK-B,Berkshire Hathaway Class B,275,Financials,542.49
+FIX,Comfort Systems USA,15,Industrials,1232.66
+COST,Costco,150,Consumer Staples,1012.28
+XOM,Exxon Mobil,500,Energy,187.25
+FDX,FedEx,100,Industrials,313.28
+FTNT,Fortinet,300,Information Technology,136.08
+IESC,IES Holdings,75,Industrials,205.96
+QQQ,Invesco QQQ Trust,100,ETF,690.49
+JPM,JPMorgan Chase,150,Financials,337.04
+MSFT,Microsoft,140,Information Technology,521.91
+NFLX,Netflix,540,Communication Services,62.08
+NVDA,NVIDIA,500,Information Technology,204.64
+PLTR,Palantir Technologies,50,Information Technology,184.11
+SCHW,Charles Schwab,300,Financials,88.05
+SAIC,Science Applications International,300,Industrials,151.86
+SOFI,SoFi Technologies,500,Financials,16.76
+UNTY,Unity Bancorp,400,Financials,57.31
+VRT,Vertiv,250,Information Technology,232.50
+V,Visa,150,Financials,413.59

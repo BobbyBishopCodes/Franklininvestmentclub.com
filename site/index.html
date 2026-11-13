@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101f2e">
+  <meta name="description" content="Franklin Investment Club portfolio holdings and allocation.">
+  <title>Portfolio | Franklin Investment Club</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./" aria-label="Franklin Investment Club home">
+        <span class="brand-mark" aria-hidden="true">F</span>
+        <span>FRANKLIN <small>INVESTMENT CLUB</small></span>
+      </a>
+      <nav aria-label="Main navigation"><a href="#allocation">Allocation</a><a href="#holdings">Holdings</a></nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="overview" aria-labelledby="page-title">
+      <div class="overview-inner">
+        <div class="eyebrow"><span class="live-dot" aria-hidden="true"></span> PORTFOLIO OVERVIEW <span class="eyebrow-rule"></span> <span id="price-date-short">LOADING</span></div>
+        <div class="overview-grid">
+          <div>
+            <h1 id="page-title">Our portfolio<span class="period">.</span></h1>
+            <p class="overview-copy">A clear view of the club’s holdings, values, and allocation.</p>
+            <p class="date-note" id="price-note">Loading portfolio data…</p>
+          </div>
+          <div class="hero-value" aria-label="Total portfolio value">
+            <span class="value-label">TOTAL PORTFOLIO VALUE</span>
+            <strong id="total-value">—</strong>
+            <span class="value-sub" id="total-sub">Including cash balance</span>
+          </div>
+        </div>
+        <div class="overview-footer">
+          <div><span>INVESTED</span><strong id="invested-value">—</strong></div>
+          <div><span>POSITIONS</span><strong id="position-count">—</strong></div>
+          <div><span>CASH</span><strong id="cash-value">—</strong></div>
+          <a href="#holdings" class="text-link">Explore holdings <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section allocation-section" id="allocation" aria-labelledby="allocation-heading">
+      <div class="section-topline"><span>01 / COMPOSITION</span><span>BY MARKET VALUE</span></div>
+      <div class="section-heading"><div><h2 id="allocation-heading">Portfolio allocation</h2><p>How invested capital is distributed across sectors.</p></div></div>
+      <div class="allocation-layout">
+        <div class="donut-wrap"><div class="donut" id="sector-donut" role="img" aria-label="Portfolio allocation by sector"><div class="donut-hole"><span>INVESTED</span><strong id="donut-total">—</strong></div></div></div>
+        <div class="sector-list" id="sector-list"></div>
+      </div>
+    </section>
+
+    <section class="content-section concentration-section" aria-labelledby="concentration-heading">
+      <div class="section-topline"><span>02 / EXPOSURE</span><span>TOP 5 HOLDINGS</span></div>
+      <div class="section-heading"><div><h2 id="concentration-heading">Largest positions</h2><p>The five holdings with the greatest share of invested capital.</p></div></div>
+      <div class="top-holdings" id="top-holdings"></div>
+    </section>
+
+    <section class="content-section holdings-section" id="holdings" aria-labelledby="holdings-heading">
+      <div class="section-topline"><span>03 / THE PORTFOLIO</span><span id="holdings-count-label">POSITIONS</span></div>
+      <div class="section-heading holdings-heading"><div><h2 id="holdings-heading">All holdings</h2><p>Share counts come from the club’s latest uploaded holdings file.</p></div><span class="table-asof" id="table-asof"></span></div>
+      <div class="table-scroll"><table><thead><tr><th scope="col">Company</th><th scope="col">Sector</th><th scope="col" class="num">Shares</th><th scope="col" class="num">Price</th><th scope="col" class="num">Value</th><th scope="col" class="num">Weight</th></tr></thead><tbody id="holdings-body"></tbody></table></div>
+    </section>
+  </main>
+
+  <footer class="footer"><div><div class="footer-brand">FRANKLIN <span>INVESTMENT CLUB</span></div><p>Portfolio values are informational and reflect the price date and basis shown above, not live quotes. Sector classifications follow the club’s statement.</p></div><span>© <span id="year"></span> Franklin Investment Club</span></footer>
+</body>
+</html>
