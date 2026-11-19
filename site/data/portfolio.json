@@ -2,10 +2,10 @@
   "price_date": "2026-11-19",
   "price_basis": "latest completed daily close",
   "statement_date": "2026-10-31",
-  "generated_at": "2026-11-19T23:47:20+00:00",
+  "generated_at": "2026-11-19T23:59:56+00:00",
   "cash": 1062.59,
-  "invested_value": 1360569.68,
-  "total_value": 1361632.27,
+  "invested_value": 1360569.7,
+  "total_value": 1361632.29,
   "positions": [
     {
       "symbol": "ABT",
@@ -53,7 +53,7 @@
       "sector": "Financials",
       "shares": 275.0,
       "price": 572.04,
-      "market_value": 157310.99
+      "market_value": 157311.0
     },
     {
       "symbol": "FIX",
@@ -69,7 +69,7 @@
       "sector": "Consumer Staples",
       "shares": 150.0,
       "price": 1093.83,
-      "market_value": 164074.49
+      "market_value": 164074.5
     },
     {
       "symbol": "XOM",
