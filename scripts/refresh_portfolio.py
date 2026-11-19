@@ -1,10 +1,3 @@
-"""Build the public portfolio snapshot from manually maintained holdings.
-
-Without --refresh, use the statement prices in the CSV. With --refresh, fetch
-the latest available daily close. A failed quote aborts the entire update so
-the site never mixes stale and new prices.
-"""
-
 import argparse
 import csv
 import json
@@ -66,8 +59,6 @@ def fetch_closes(symbols):
     closes = {}
     dates = set()
     market_now = datetime.now(ZoneInfo("America/New_York"))
-    # Yahoo's daily candle includes the unfinished current session. Give the
-    # final close time to settle before treating today's candle as complete.
     latest_completed_day = market_now.date() if market_now.hour >= 17 else market_now.date() - timedelta(days=1)
     for symbol in symbols:
         history = yf.Ticker(symbol).history(period="7d", interval="1d", auto_adjust=False)

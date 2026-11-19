@@ -11,6 +11,11 @@ on:
   schedule:
     - cron: "0 23 * * 1-5"
   workflow_dispatch:
+    inputs:
+      deploy_only:
+        description: Publish the checked-in portfolio snapshot
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -31,15 +36,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
+        if: ${{ !inputs.deploy_only }}
         with:
           python-version: "3.12"
           cache: pip
           cache-dependency-path: requirements.txt
       - name: Install price dependency
+        if: ${{ !inputs.deploy_only }}
         run: pip install -r requirements.txt
       - name: Refresh closing prices
+        if: ${{ !inputs.deploy_only }}
         run: python scripts/refresh_portfolio.py --refresh
       - name: Commit price snapshot
+        if: ${{ !inputs.deploy_only }}
         run: |
           git add site/data/portfolio.json
           if ! git diff --cached --quiet; then
