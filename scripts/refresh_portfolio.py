@@ -91,14 +91,14 @@ def build(refresh=False):
         basis = "club statement"
     positions = []
     for item in holdings:
-        price = closes[item["symbol"]]
+        price = closes[item["symbol"]].quantize(Decimal("0.01"))
         value = (item["shares"] * price).quantize(Decimal("0.01"))
         positions.append({
             "symbol": item["symbol"],
             "name": item["name"],
             "sector": item["sector"],
             "shares": float(item["shares"]),
-            "price": float(price.quantize(Decimal("0.01"))),
+            "price": float(price),
             "market_value": float(value),
         })
     invested = sum(Decimal(str(item["market_value"])) for item in positions)

@@ -7,6 +7,8 @@ on:
       - "data/**"
       - "site/**"
       - "scripts/**"
+      - "tests/**"
+      - "requirements*.txt"
       - ".github/workflows/portfolio-pages.yml"
   schedule:
     - cron: "0 23 * * 1-5"
@@ -43,7 +45,10 @@ jobs:
           cache-dependency-path: requirements.txt
       - name: Install price dependency
         if: ${{ !inputs.deploy_only }}
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt -r requirements-import.txt
+      - name: Validate statement importer
+        if: ${{ !inputs.deploy_only }}
+        run: python -m unittest discover -s tests -v
       - name: Refresh closing prices
         if: ${{ !inputs.deploy_only }}
         run: python scripts/refresh_portfolio.py --refresh
