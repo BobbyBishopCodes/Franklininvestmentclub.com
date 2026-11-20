@@ -111,15 +111,7 @@ def build(refresh=False):
     holdings_digest = hashlib.sha256(HOLDINGS.read_bytes() + META.read_bytes()).hexdigest()
     cash = money(meta["cash"], "cash")
     if refresh:
-        try:
-            closes, ranges, previous_closes, price_date = fetch_quotes([item["symbol"] for item in holdings])
-        except RuntimeError:
-            if OUTPUT.exists():
-                previous = json.loads(OUTPUT.read_text(encoding="utf-8"))
-                if previous.get("holdings_digest") == holdings_digest and previous.get("price_date", "") >= meta["statement_date"]:
-                    print("Quote refresh incomplete; retained the last matching portfolio snapshot")
-                    return
-            raise
+        closes, ranges, previous_closes, price_date = fetch_quotes([item["symbol"] for item in holdings])
         basis = "latest completed daily close"
     else:
         closes = {item["symbol"]: item["statement_price"] for item in holdings}

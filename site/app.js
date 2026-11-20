@@ -110,7 +110,24 @@ function render(data) {
 fetch('data/portfolio.json', { cache: 'no-store' }).then(response => {
   if (!response.ok) throw new Error(`Portfolio unavailable (${response.status})`);
   return response.json();
-}).then(render).catch(error => {
+}).then(data => {
+  render(data);
+  return fetch('data/analysis.json', { cache: 'no-store' }).then(response => {
+    if (!response.ok) throw new Error('Historical analysis unavailable');
+    return response.json();
+  }).then(analysis => {
+    const symbols = data.positions.map(position => position.symbol).sort();
+    if (analysis.price_date !== data.price_date || analysis.statement_date !== data.statement_date ||
+        JSON.stringify(analysis.symbols) !== JSON.stringify(symbols)) throw new Error('Historical analysis does not match portfolio');
+    for (const [id, value] of [['portfolio-beta', analysis.risk?.beta], ['portfolio-sharpe', analysis.risk?.sharpe]]) {
+      text(id, Number.isFinite(value) ? value.toFixed(2) : 'Unavailable');
+    }
+  }).catch(error => {
+    text('portfolio-beta', 'Unavailable');
+    text('portfolio-sharpe', 'Unavailable');
+    console.error(error);
+  });
+}).catch(error => {
   text('price-note', 'Portfolio data could not be loaded. Please try again later.');
   document.getElementById('sector-donut').setAttribute('aria-label', 'Portfolio data unavailable');
   console.error(error);
