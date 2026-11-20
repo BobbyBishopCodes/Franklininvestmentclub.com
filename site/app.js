@@ -13,16 +13,15 @@ function text(id, value) { document.getElementById(id).textContent = value; }
 function render(data) {
   const positions = [...data.positions].sort((a, b) => b.market_value - a.market_value);
   const invested = data.invested_value;
-  text('price-date-short', dateLabel(data.price_date, true).toUpperCase());
-  text('price-note', `Holdings and cash as of ${dateLabel(data.statement_date)} · prices as of ${dateLabel(data.price_date)} (${data.price_basis}).`);
+  text('price-date-short', dateLabel(data.price_date, true));
+  text('price-note', `Holdings and cash: ${dateLabel(data.statement_date)} · Prices: ${dateLabel(data.price_date)}${data.price_basis === 'club statement' ? ' (statement)' : ''}`);
   text('total-value', usd.format(data.total_value));
-  text('total-sub', `Using the ${dateLabel(data.statement_date)} holdings and cash balance`);
   text('invested-value', usd.format(invested));
   text('position-count', String(positions.length));
   text('cash-value', usd.format(data.cash));
   text('donut-total', new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2, style: 'currency', currency: 'USD' }).format(invested));
-  text('holdings-count-label', `${positions.length} POSITIONS`);
-  text('table-asof', `PRICES AS OF ${dateLabel(data.price_date, true).toUpperCase()}`);
+  text('holdings-count-label', `(${positions.length})`);
+  text('table-asof', `Prices as of ${dateLabel(data.price_date, true)}`);
   text('year', String(new Date().getFullYear()));
 
   const sectors = new Map();
