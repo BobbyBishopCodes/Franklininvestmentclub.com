@@ -2,31 +2,13 @@
 
 Created by Robert Bishop, an Accountancy & Finance major at ETSU.
 
-The public site shows the club's positions, sector allocation, and largest holdings. Share counts and cash come from a dated monthly statement. GitHub Actions refreshes closing prices and publishes the static site. The source PDF is kept outside this public repository because its second page contains member ownership information.
+The public site shows the club's positions, sector allocation, and largest holdings. Share counts and cash come from a dated club statement or CSV. GitHub Actions refreshes closing prices and publishes the static site. Source files containing member information stay outside this public repository.
 
-## Monthly statement process
+## Portfolio updates
 
-1. Save the new Franklin Investment Club PDF statement on your computer. Do **not** add the PDF to this repository.
-2. Install the local import dependency once: `python -m pip install -r requirements-import.txt`.
-3. Preview the import without changing files:
+Send the new CSV to the site maintainer. The maintainer reconciles it, updates the public holdings and cash balance, and verifies the live deployment. No upload tool or API key is needed from club members. A PDF importer remains available for statements in the October 2026 format.
 
-   ```powershell
-   python scripts/import_statement.py "C:\path\to\Franklin Inv Club - MM-YYYY.pdf"
-   ```
-
-4. Check the printed statement date, number of positions, stock value, cash, total, additions, removals, and share changes against the PDF. If a new ticker is reported, add its sector to `data/sector-map.json` and preview again. The importer normalizes the statement's `APPL` to `AAPL` and `BRKB` to `BRK-B`.
-5. Apply the reviewed import:
-
-   ```powershell
-   python scripts/import_statement.py "C:\path\to\Franklin Inv Club - MM-YYYY.pdf" --apply
-   git diff -- data/holdings.csv data/portfolio-meta.json site/data/portfolio.json
-   ```
-
-6. Commit and push the generated data to `main`. Then check that **Refresh portfolio and publish site** succeeds in [GitHub Actions](https://github.com/BobbyBishopCodes/Franklininvestmentclub.com/actions) and verify the page's holdings date, price date, position count, and total.
-
-The importer reads only the PDF's first page. It fails if a holding does not reconcile to shares × price, the position count disagrees, stock and cost totals disagree, or stock plus cash does not equal the printed portfolio total. It also refuses a statement older than the current one. A repeated import of the same data keeps the existing market price snapshot.
-
-`data/holdings.csv` is the published input. Its columns are `symbol,name,shares,sector,statement_price`. `data/portfolio-meta.json` holds the statement date and cash. The `site/data/portfolio.json` snapshot is generated. Git history preserves prior imports.
+`data/holdings.csv` is the public input. Its columns are `symbol,name,shares,sector,statement_price`. `data/portfolio-meta.json` holds the holdings date and cash. The `site/data/portfolio.json` snapshot is generated. Git history preserves prior imports.
 
 ## Price and publishing process
 
