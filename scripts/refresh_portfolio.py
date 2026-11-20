@@ -105,13 +105,21 @@ def fetch_quotes(symbols):
     return closes, ranges, previous_closes, dates.pop()
 
 
-def build(refresh=False):
+def build(refresh=False, allow_stale=False):
     holdings = load_holdings()
     meta = json.loads(META.read_text(encoding="utf-8"))
     holdings_digest = hashlib.sha256(HOLDINGS.read_bytes() + META.read_bytes()).hexdigest()
     cash = money(meta["cash"], "cash")
     if refresh:
-        closes, ranges, previous_closes, price_date = fetch_quotes([item["symbol"] for item in holdings])
+        try:
+            closes, ranges, previous_closes, price_date = fetch_quotes([item["symbol"] for item in holdings])
+        except RuntimeError:
+            if allow_stale and OUTPUT.exists():
+                previous = json.loads(OUTPUT.read_text(encoding="utf-8"))
+                if previous.get("holdings_digest") == holdings_digest and previous.get("price_date", "") >= meta["statement_date"]:
+                    print("::warning::Quote refresh incomplete; deploying the last matching snapshot")
+                    return
+            raise
         basis = "latest completed daily close"
     else:
         closes = {item["symbol"]: item["statement_price"] for item in holdings}
@@ -168,4 +176,6 @@ def build(refresh=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--refresh", action="store_true", help="Fetch latest daily closing prices")
-    build(parser.parse_args().refresh)
+    parser.add_argument("--allow-stale", action="store_true", help="Retain a matching snapshot if quotes are incomplete")
+    args = parser.parse_args()
+    build(args.refresh, args.allow_stale)

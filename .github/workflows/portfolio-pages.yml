@@ -51,7 +51,14 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Refresh closing prices
         if: ${{ !inputs.deploy_only }}
-        run: python scripts/refresh_portfolio.py --refresh
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "push" ]; then
+            python scripts/refresh_portfolio.py --refresh --allow-stale
+          else
+            python scripts/refresh_portfolio.py --refresh
+          fi
       - name: Refresh historical analysis
         if: ${{ !inputs.deploy_only }}
         run: python scripts/analyze_portfolio.py
