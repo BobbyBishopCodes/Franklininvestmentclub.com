@@ -25,7 +25,6 @@ function render(data) {
   text('gain-percent', data.total_cost > 0 ? signedPercent(data.unrealized_gain / data.total_cost) : '—');
   if (data.unrealized_gain !== 0) document.getElementById('gain-value').classList.add(gainClass(data.unrealized_gain));
   text('daily-change', data.daily_holdings_change == null ? 'Unavailable' : signedCurrency(data.daily_holdings_change));
-  text('daily-change-percent', data.daily_holdings_change_percent == null ? 'Quotes incomplete' : `${signedPercent(data.daily_holdings_change_percent)} · fixed shares`);
   if (data.daily_holdings_change != null && data.daily_holdings_change !== 0) document.getElementById('daily-change').classList.add(gainClass(data.daily_holdings_change));
   text('annual-income', usd.format(data.estimated_annual_income));
   text('income-yield', percent.format(data.estimated_income_yield));
