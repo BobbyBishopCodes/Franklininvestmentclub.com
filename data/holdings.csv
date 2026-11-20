@@ -1,25 +1,25 @@
-symbol,name,shares,sector,statement_price
-ABT,Abbott Laboratories,375,Health Care,106.20
-ABBV,AbbVie,225,Health Care,294.89
-GOOGL,Alphabet Class A,400,Information Technology,279.84
-AMZN,Amazon,400,Consumer Discretionary,240.35
-AAPL,Apple,125,Information Technology,344.63
-BRK-B,Berkshire Hathaway Class B,275,Financials,542.49
-FIX,Comfort Systems USA,15,Industrials,1232.66
-COST,Costco,150,Consumer Staples,1012.28
-XOM,Exxon Mobil,500,Energy,187.25
-FDX,FedEx,100,Industrials,313.28
-FTNT,Fortinet,300,Information Technology,136.08
-IESC,IES Holdings,75,Industrials,205.96
-QQQ,Invesco QQQ Trust,100,ETF,690.49
-JPM,JPMorgan Chase,150,Financials,337.04
-MSFT,Microsoft,140,Information Technology,521.91
-NFLX,Netflix,540,Communication Services,62.08
-NVDA,NVIDIA,500,Information Technology,204.64
-PLTR,Palantir Technologies,50,Information Technology,184.11
-SCHW,Charles Schwab,300,Financials,88.05
-SAIC,Science Applications International,300,Industrials,151.86
-SOFI,SoFi Technologies,500,Financials,16.76
-UNTY,Unity Bancorp,400,Financials,57.31
-VRT,Vertiv,250,Information Technology,232.50
-V,Visa,150,Financials,413.59
+symbol,name,shares,sector,statement_price,total_cost,annual_income
+ABT,Abbott Laboratories,375,Health Care,106.20,12199.37,945.00
+ABBV,AbbVie,225,Health Care,294.89,19158.00,1638.00
+GOOGL,Alphabet Class A,400,Information Technology,279.84,53435.44,352.00
+AMZN,Amazon,400,Consumer Discretionary,240.35,71680.72,0.00
+AAPL,Apple,125,Information Technology,344.63,30531.51,135.00
+BRK-B,Berkshire Hathaway Class B,275,Financials,542.49,83881.65,0.00
+FIX,Comfort Systems USA,15,Industrials,1232.66,24629.35,60.00
+COST,Costco,150,Consumer Staples,1012.28,59124.43,882.00
+XOM,Exxon Mobil,500,Energy,187.25,35253.38,2140.00
+FDX,FedEx,100,Industrials,313.28,24837.57,488.00
+FTNT,Fortinet,300,Information Technology,136.08,18212.15,0.00
+IESC,IES Holdings,75,Industrials,205.96,27685.58,0.00
+QQQ,Invesco QQQ Trust,100,ETF,690.49,45584.00,309.00
+JPM,JPMorgan Chase,150,Financials,337.04,17749.89,990.00
+MSFT,Microsoft,140,Information Technology,521.91,61840.49,548.00
+NFLX,Netflix,540,Communication Services,62.08,58834.98,0.00
+NVDA,NVIDIA,500,Information Technology,204.64,29713.28,500.00
+PLTR,Palantir Technologies,50,Information Technology,184.11,7904.00,0.00
+SCHW,Charles Schwab,300,Financials,88.05,25323.20,384.00
+SAIC,Science Applications International,300,Industrials,151.86,34847.00,444.00
+SOFI,SoFi Technologies,500,Financials,16.76,8129.95,0.00
+UNTY,Unity Bancorp,400,Financials,57.31,19021.73,272.00
+VRT,Vertiv,250,Information Technology,232.50,37836.35,63.00
+V,Visa,150,Financials,413.59,23737.82,468.00

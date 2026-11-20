@@ -50,6 +50,9 @@ def parse_statement_text(text):
         if not match:
             raise ValueError(f"Could not parse holding row: {line.strip()[:90]}")
         fields = match.groupdict()
+        income_match = re.search(rf"(?P<annual_income>{AMOUNT})\s*$", line[match.end():])
+        if not income_match:
+            raise ValueError(f"Annual dividend estimate missing for {fields['raw_symbol']}")
         symbol = SYMBOL_ALIASES.get(fields["raw_symbol"], fields["raw_symbol"])
         if symbol in seen:
             raise ValueError(f"Duplicate holding: {symbol}")
@@ -58,12 +61,14 @@ def parse_statement_text(text):
         price = money(fields["price"], f"price for {symbol}")
         value = money(fields["value"], f"value for {symbol}")
         cost = money(fields["total_cost"], f"cost for {symbol}")
+        annual_income = money(income_match.group("annual_income"), f"annual income for {symbol}")
         if shares <= 0 or price <= 0:
             raise ValueError(f"Nonpositive shares or price for {symbol}")
         if (shares * price).quantize(Decimal("0.01")) != value:
             raise ValueError(f"Shares × price does not equal printed value for {symbol}")
         positions.append({"symbol": symbol, "statement_name": fields["name"].strip(), "shares": shares,
-                          "price": price, "value": value, "cost": cost, "printed_weight": Decimal(fields["weight"][:-1])})
+                          "price": price, "value": value, "cost": cost, "annual_income": annual_income,
+                          "printed_weight": Decimal(fields["weight"][:-1])})
     if not positions:
         raise ValueError("No holdings found on statement page one")
     count = int(position_total.group(1))
@@ -107,7 +112,9 @@ def prepare(statement, sector_map, existing):
         old = old_by_symbol.get(symbol)
         name = old["name"] if old else position["statement_name"]
         rows.append({"symbol": symbol, "name": name, "shares": str(position["shares"]),
-                     "sector": sector, "statement_price": f"{position['price']:.2f}"})
+                     "sector": sector, "statement_price": f"{position['price']:.2f}",
+                     "total_cost": f"{position['cost']:.2f}",
+                     "annual_income": f"{position['annual_income']:.2f}"})
     return rows
 
 
@@ -140,7 +147,7 @@ def main():
     if not args.apply:
         print("Preview only. Add --apply after reviewing the changes.")
         return
-    fields = ["symbol", "name", "shares", "sector", "statement_price"]
+    fields = ["symbol", "name", "shares", "sector", "statement_price", "total_cost", "annual_income"]
     buffer = io.StringIO(newline="")
     writer = csv.DictWriter(buffer, fieldnames=fields, lineterminator="\n")
     writer.writeheader()

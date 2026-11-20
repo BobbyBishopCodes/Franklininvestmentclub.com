@@ -28,7 +28,7 @@
           <div><span>Invested</span><strong id="invested-value">—</strong></div>
           <div><span>Positions</span><strong id="position-count">—</strong></div>
           <div><span>Cash</span><strong id="cash-value">—</strong></div>
-          <div><span>Pricing date</span><strong id="price-date-short">—</strong></div>
+          <div><span>Unrealized gain/loss</span><strong id="gain-value">—</strong><small id="gain-percent"></small></div>
         </div>
       </div>
     </section>
@@ -49,9 +49,17 @@
       </div>
     </section>
 
+    <section class="metrics page-width" aria-label="Portfolio statistics">
+      <div><span>One-day holdings change</span><strong id="daily-change">—</strong><small id="daily-change-percent"></small></div>
+      <div><span>Estimated annual income</span><strong id="annual-income">—</strong><small>Statement estimate</small></div>
+      <div><span>Estimated income yield</span><strong id="income-yield">—</strong><small>Annual income ÷ portfolio value</small></div>
+      <div><span>Beta · 3 years</span><strong id="portfolio-beta">—</strong><small>Current weights vs. S&amp;P 500</small></div>
+      <div><span>Sharpe · 3 years</span><strong id="portfolio-sharpe">—</strong><small>Current weights · 3-month Treasury</small></div>
+    </section>
+
     <section class="holdings-section page-width" id="holdings" aria-labelledby="holdings-heading">
       <div class="section-heading holdings-heading"><h2 id="holdings-heading">Holdings <span id="holdings-count-label"></span></h2><span class="table-asof" id="table-asof"></span></div>
-      <div class="table-scroll"><table><thead><tr><th scope="col">Company</th><th scope="col">Sector</th><th scope="col" class="num">Shares</th><th scope="col" class="num">Price</th><th scope="col" class="num">Value</th><th scope="col" class="num">Weight</th></tr></thead><tbody id="holdings-body"></tbody></table></div>
+      <div class="table-scroll"><table><thead><tr><th scope="col">Company</th><th scope="col">Sector</th><th scope="col" class="num">Shares</th><th scope="col" class="num">Price</th><th scope="col" class="num">Value</th><th scope="col" class="num">Weight</th><th scope="col" class="num">52-week low</th><th scope="col" class="num">52-week high</th><th scope="col" class="num">Unrealized gain/loss</th></tr></thead><tbody id="holdings-body"></tbody></table></div>
     </section>
   </main>
 

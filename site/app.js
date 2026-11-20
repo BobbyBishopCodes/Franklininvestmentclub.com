@@ -9,16 +9,26 @@ function dateLabel(iso, short = false) {
 }
 
 function text(id, value) { document.getElementById(id).textContent = value; }
+function signedCurrency(value) { return `${value > 0 ? '+' : ''}${usd.format(value)}`; }
+function signedPercent(value) { return `${value > 0 ? '+' : ''}${percent.format(value)}`; }
+function gainClass(value) { return value > 0 ? 'gain-positive' : value < 0 ? 'gain-negative' : ''; }
 
 function render(data) {
   const positions = [...data.positions].sort((a, b) => b.market_value - a.market_value);
   const invested = data.invested_value;
-  text('price-date-short', dateLabel(data.price_date, true));
   text('price-note', `Holdings and cash: ${dateLabel(data.statement_date)} · Prices: ${dateLabel(data.price_date)}${data.price_basis === 'club statement' ? ' (statement)' : ''}`);
   text('total-value', usd.format(data.total_value));
   text('invested-value', usd.format(invested));
   text('position-count', String(positions.length));
   text('cash-value', usd.format(data.cash));
+  text('gain-value', signedCurrency(data.unrealized_gain));
+  text('gain-percent', data.total_cost > 0 ? signedPercent(data.unrealized_gain / data.total_cost) : '—');
+  if (data.unrealized_gain !== 0) document.getElementById('gain-value').classList.add(gainClass(data.unrealized_gain));
+  text('daily-change', data.daily_holdings_change == null ? 'Unavailable' : signedCurrency(data.daily_holdings_change));
+  text('daily-change-percent', data.daily_holdings_change_percent == null ? 'Quotes incomplete' : `${signedPercent(data.daily_holdings_change_percent)} · fixed shares`);
+  if (data.daily_holdings_change != null && data.daily_holdings_change !== 0) document.getElementById('daily-change').classList.add(gainClass(data.daily_holdings_change));
+  text('annual-income', usd.format(data.estimated_annual_income));
+  text('income-yield', percent.format(data.estimated_income_yield));
   text('donut-total', new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2, style: 'currency', currency: 'USD' }).format(invested));
   text('holdings-count-label', `(${positions.length})`);
   text('table-asof', `Prices as of ${dateLabel(data.price_date, true)}`);
@@ -57,7 +67,9 @@ function render(data) {
   for (const position of positions) {
     const row = document.createElement('tr');
     const company = document.createElement('td'); const wrapper = document.createElement('div'); wrapper.className = 'company-cell';
-    const ticker = document.createElement('span'); ticker.className = 'ticker'; ticker.textContent = position.symbol;
+    const ticker = document.createElement('button'); ticker.type = 'button'; ticker.className = 'ticker ticker-button'; ticker.textContent = position.symbol;
+    ticker.setAttribute('aria-expanded', 'false'); ticker.setAttribute('aria-controls', `details-${position.symbol}`);
+    ticker.setAttribute('aria-label', `Show ${position.symbol} position details`);
     const name = document.createElement('span'); name.className = 'company-name'; name.textContent = position.name;
     wrapper.append(ticker, name); company.append(wrapper);
     const sector = document.createElement('td'); sector.className = 'sector-cell'; sector.textContent = position.sector;
@@ -65,7 +77,33 @@ function render(data) {
     const price = document.createElement('td'); price.className = 'num'; price.textContent = usd.format(position.price);
     const value = document.createElement('td'); value.className = 'num'; value.textContent = usd.format(position.market_value);
     const weight = document.createElement('td'); weight.className = 'num weight-cell'; weight.textContent = percent.format(position.market_value / invested);
-    row.append(company, sector, shares, price, value, weight); body.append(row);
+    const low = document.createElement('td'); low.className = 'num'; low.textContent = position.week_52_low == null ? '—' : usd.format(position.week_52_low);
+    const high = document.createElement('td'); high.className = 'num'; high.textContent = position.week_52_high == null ? '—' : usd.format(position.week_52_high);
+    const gain = document.createElement('td'); gain.className = `num gain-cell ${gainClass(position.unrealized_gain)}`;
+    gain.textContent = signedCurrency(position.unrealized_gain);
+    const gainRate = document.createElement('small'); gainRate.textContent = position.total_cost > 0 ? signedPercent(position.unrealized_gain / position.total_cost) : '—'; gain.append(gainRate);
+    row.append(company, sector, shares, price, value, weight, low, high, gain);
+    const detailsRow = document.createElement('tr'); detailsRow.id = `details-${position.symbol}`; detailsRow.className = 'position-details'; detailsRow.hidden = true;
+    const detailsCell = document.createElement('td'); detailsCell.colSpan = 9;
+    const detailsGrid = document.createElement('div'); detailsGrid.className = 'position-details-grid';
+    const details = [
+      ['Cost basis', usd.format(position.total_cost)],
+      ['Average cost / share', usd.format(position.total_cost / position.shares)],
+      ['Estimated annual income', usd.format(position.estimated_annual_income)],
+      ['Estimated income yield', percent.format(position.estimated_annual_income / position.market_value)],
+      ['One-day holdings change', position.daily_change == null ? 'Unavailable' : signedCurrency(position.daily_change)],
+    ];
+    for (const [label, value] of details) {
+      const item = document.createElement('div'); const caption = document.createElement('span'); caption.textContent = label;
+      const figure = document.createElement('strong'); figure.textContent = value; item.append(caption, figure); detailsGrid.append(item);
+    }
+    detailsCell.append(detailsGrid); detailsRow.append(detailsCell);
+    ticker.addEventListener('click', () => {
+      detailsRow.hidden = !detailsRow.hidden;
+      ticker.setAttribute('aria-expanded', String(!detailsRow.hidden));
+      ticker.setAttribute('aria-label', `${detailsRow.hidden ? 'Show' : 'Hide'} ${position.symbol} position details`);
+    });
+    body.append(row, detailsRow);
   }
 }
 

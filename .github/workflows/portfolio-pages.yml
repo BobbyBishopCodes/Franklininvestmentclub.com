@@ -52,10 +52,13 @@ jobs:
       - name: Refresh closing prices
         if: ${{ !inputs.deploy_only }}
         run: python scripts/refresh_portfolio.py --refresh
+      - name: Refresh historical analysis
+        if: ${{ !inputs.deploy_only }}
+        run: python scripts/analyze_portfolio.py
       - name: Commit price snapshot
         if: ${{ !inputs.deploy_only }}
         run: |
-          git add site/data/portfolio.json
+          git add site/data/portfolio.json site/data/analysis.json
           if ! git diff --cached --quiet; then
             git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Refresh portfolio prices'
             git push
