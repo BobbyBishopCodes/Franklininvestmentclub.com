@@ -22,11 +22,11 @@ OUTPUT = ROOT / "site/data/analysis.json"
 
 
 def treasury_history():
-    url = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTB3"
+    url = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS3MO"
     with urllib.request.urlopen(url, timeout=30) as response:
         rows = list(csv.DictReader(response.read().decode("utf-8").splitlines()))
-    values = {pd.Timestamp(row["observation_date"]): float(row["DTB3"]) / 100
-              for row in rows if row["DTB3"] not in ("", ".")}
+    values = {pd.Timestamp(row["observation_date"]): float(row["DGS3MO"]) / 100
+              for row in rows if row["DGS3MO"] not in ("", ".")}
     if not values:
         raise RuntimeError("3-month Treasury history is unavailable")
     return pd.Series(values, dtype=float).sort_index()
@@ -34,12 +34,16 @@ def treasury_history():
 
 def monthly_risk(prices, treasury, weights, price_date):
     completed_month = pd.Timestamp(price_date).to_period("M") - 1
+    if any(not math.isfinite(w) or w < 0 for w in weights.values()) or sum(weights.values()) > 1 + 1e-9:
+        raise ValueError("Weights must be finite, nonnegative and sum to at most one")
     monthly = prices.groupby(prices.index.to_period("M")).tail(1).copy()
     monthly.index = monthly.index.to_period("M").to_timestamp("M")
     monthly = monthly[monthly.index.to_period("M") <= completed_month].tail(37)
     if len(monthly) != 37 or monthly.isna().any().any():
         return {"status": "unavailable", "reason": "Incomplete 3-year monthly price history", "beta": None, "sharpe": None}
     periods = monthly.index.to_period("M")
+    if periods[-1] != completed_month or not np.isfinite(monthly.to_numpy()).all() or (monthly <= 0).any().any():
+        return {"status": "unavailable", "reason": "Stale or invalid monthly prices", "beta": None, "sharpe": None}
     if list(periods) != list(pd.period_range(periods[0], periods[-1], freq="M")):
         return {"status": "unavailable", "reason": "Gap in monthly price history", "beta": None, "sharpe": None}
     rates = treasury.resample("ME").last()
@@ -50,7 +54,12 @@ def monthly_risk(prices, treasury, weights, price_date):
     symbols = list(weights)
     portfolio_returns = changes[symbols].to_numpy() @ np.array([weights[s] for s in symbols])
     benchmark_returns = changes["^GSPC"].to_numpy()
-    risk_free = np.power(1 + previous_rates.to_numpy(), 1 / 12) - 1
+    # Investment-basis yield proxy, known at the prior month end. This is
+    # simple ACT/365 accrual, not a realized Treasury total-return series.
+    days = np.array([(end - start).days for start, end in zip(monthly.index[:-1], monthly.index[1:])])
+    risk_free = previous_rates.to_numpy() * days / 365
+    cash_weight = 1 - sum(weights.values())
+    # Statement cash is modeled as non-interest-bearing.
     excess = portfolio_returns - risk_free
     benchmark_variance = np.var(benchmark_returns, ddof=1)
     excess_sd = np.std(excess, ddof=1)
@@ -61,7 +70,20 @@ def monthly_risk(prices, treasury, weights, price_date):
     if not all(map(math.isfinite, (beta, sharpe))):
         return {"status": "unavailable", "reason": "Invalid risk result", "beta": None, "sharpe": None}
     return {"status": "available", "reason": None, "beta": float(beta), "sharpe": float(sharpe),
-            "window_start": str(periods[1]), "window_end": str(periods[-1]), "observations": 36}
+            "window_start": str(periods[1]), "window_end": str(periods[-1]), "observations": 36,
+            "method": "Current weights rebalanced monthly; adjusted total returns; cash earns zero; gross of fees",
+            "risk_free_method": "Prior month-end DGS3MO investment yield times calendar days / 365 (proxy)",
+            "annualization": "sqrt(12); assumes monthly excess returns are uncorrelated",
+            "cash_weight": cash_weight, "weights": weights,
+            "mean_monthly_excess": float(np.mean(excess)), "sample_monthly_excess_sd": float(excess_sd),
+            "annualized_arithmetic_excess": float(12 * np.mean(excess)),
+            "annualized_excess_volatility": float(math.sqrt(12) * excess_sd),
+            "monthly_audit": [{"month": str(periods[i + 1]),
+                               "adjusted_closes": {s: float(monthly.iloc[i + 1][s]) for s in monthly.columns},
+                               "portfolio_return": float(portfolio_returns[i]),
+                               "benchmark_return": float(benchmark_returns[i]), "risk_free_return": float(risk_free[i]),
+                               "excess_return": float(excess[i])} for i in range(36)],
+            "initial_adjusted_closes": {s: float(monthly.iloc[0][s]) for s in monthly.columns}}
 
 
 def build():
@@ -107,7 +129,7 @@ def build():
     latest_treasury = treasury[treasury.index.date <= date.fromisoformat(price_date)].iloc[-1]
     document = {
         "price_date": price_date, "statement_date": portfolio["statement_date"],
-        "symbols": symbols, "source": "Yahoo Finance adjusted closes; FRED DTB3 Treasury bill",
+        "symbols": symbols, "source": "Yahoo Finance adjusted closes; FRED DGS3MO investment-basis Treasury yield",
         "risk": risk,
         "correlation": {"start_date": daily.index[0].date().isoformat(),
                         "end_date": daily.index[-1].date().isoformat(), "observations": len(daily),

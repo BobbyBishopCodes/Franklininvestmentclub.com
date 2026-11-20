@@ -1,5 +1,7 @@
 import sys
 import unittest
+import math
+import statistics
 from pathlib import Path
 
 import numpy as np
@@ -21,6 +23,24 @@ class PortfolioRiskTests(unittest.TestCase):
         self.assertEqual(result["observations"], 36)
         self.assertAlmostEqual(result["beta"], 1.0)
         self.assertTrue(np.isfinite(result["sharpe"]))
+        audited = result['monthly_audit']
+        excess = [row['excess_return'] for row in audited]
+        independent = math.sqrt(12) * statistics.mean(excess) / statistics.stdev(excess)
+        self.assertAlmostEqual(result['sharpe'], independent, places=12)
+        self.assertAlmostEqual(audited[0]['risk_free_return'], .04 * 30 / 365)
+
+    def test_known_returns_cash_and_missing_history(self):
+        months = pd.date_range('2023-10-31', periods=37, freq='ME')
+        returns = np.tile([-.02, .01, .04], 12)
+        values = np.r_[100, 100 * np.cumprod(1 + returns)]
+        history = pd.DataFrame({'ALPH': values, '^GSPC': values}, index=months)
+        result = monthly_risk(history, pd.Series(0., index=months), {'ALPH': .8}, '2026-11-19')
+        expected = [.8 * float(r) for r in returns]
+        self.assertAlmostEqual(result['sharpe'], math.sqrt(12) * statistics.mean(expected) / statistics.stdev(expected))
+        self.assertAlmostEqual(result['beta'], .8)
+        self.assertAlmostEqual(result['cash_weight'], .2)
+        missing = monthly_risk(history.iloc[:-1], pd.Series(0., index=months), {'ALPH': 1.}, '2026-11-19')
+        self.assertEqual(missing['status'], 'unavailable')
 
 
 if __name__ == "__main__":
