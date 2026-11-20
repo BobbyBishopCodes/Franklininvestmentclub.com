@@ -2,12 +2,17 @@
   "price_date": "2026-11-19",
   "price_basis": "latest completed daily close",
   "statement_date": "2026-10-31",
-  "generated_at": "2026-11-20T02:28:53+00:00",
+  "holdings_digest": "b406e927af79066320249bb3e5bf6e727e5a750ab17d8d82846d3b84fb9be525",
+  "generated_at": "2026-11-20T15:59:14+00:00",
   "cash": 1062.59,
   "invested_value": 1360569.7,
   "total_cost": 831151.84,
   "unrealized_gain": 529417.86,
   "total_value": 1361632.29,
+  "estimated_annual_income": 10618.0,
+  "estimated_income_yield": 0.007797993685945859,
+  "daily_holdings_change": -24833.3,
+  "daily_holdings_change_percent": -0.017924964793637664,
   "positions": [
     {
       "symbol": "ABT",
@@ -18,10 +23,10 @@
       "market_value": 38951.25,
       "total_cost": 12199.37,
       "unrealized_gain": 26751.88,
-      "week_52_low": 81.97,
-      "week_52_high": 129.85,
       "estimated_annual_income": 945.0,
-      "daily_change": -228.75
+      "daily_change": -228.75,
+      "week_52_low": 81.97,
+      "week_52_high": 129.85
     },
     {
       "symbol": "ABBV",
@@ -32,10 +37,10 @@
       "market_value": 63796.5,
       "total_cost": 19158.0,
       "unrealized_gain": 44638.5,
-      "week_52_low": 190.75,
-      "week_52_high": 302.93,
       "estimated_annual_income": 1638.0,
-      "daily_change": -555.75
+      "daily_change": -555.75,
+      "week_52_low": 190.75,
+      "week_52_high": 302.93
     },
     {
       "symbol": "GOOGL",
@@ -46,10 +51,10 @@
       "market_value": 109064.0,
       "total_cost": 53435.44,
       "unrealized_gain": 55628.56,
-      "week_52_low": 272.11,
-      "week_52_high": 408.61,
       "estimated_annual_income": 352.0,
-      "daily_change": -3912.0
+      "daily_change": -3912.0,
+      "week_52_low": 272.11,
+      "week_52_high": 408.61
     },
     {
       "symbol": "AMZN",
@@ -60,10 +65,10 @@
       "market_value": 102948.0,
       "total_cost": 71680.72,
       "unrealized_gain": 31267.28,
-      "week_52_low": 196.0,
-      "week_52_high": 287.2,
       "estimated_annual_income": 0.0,
-      "daily_change": -4148.0
+      "daily_change": -4148.0,
+      "week_52_low": 196.0,
+      "week_52_high": 287.2
     },
     {
       "symbol": "AAPL",
@@ -74,10 +79,10 @@
       "market_value": 43651.25,
       "total_cost": 30531.51,
       "unrealized_gain": 13119.74,
-      "week_52_low": 243.42,
-      "week_52_high": 360.83,
       "estimated_annual_income": 135.0,
-      "daily_change": -405.0
+      "daily_change": -405.0,
+      "week_52_low": 243.42,
+      "week_52_high": 360.83
     },
     {
       "symbol": "BRK-B",
@@ -88,10 +93,10 @@
       "market_value": 157311.0,
       "total_cost": 83881.65,
       "unrealized_gain": 73429.35,
-      "week_52_low": 464.01,
-      "week_52_high": 596.92,
       "estimated_annual_income": 0.0,
-      "daily_change": -709.5
+      "daily_change": -709.5,
+      "week_52_low": 464.01,
+      "week_52_high": 596.92
     },
     {
       "symbol": "FIX",
@@ -102,10 +107,10 @@
       "market_value": 16710.3,
       "total_cost": 24629.35,
       "unrealized_gain": -7919.05,
-      "week_52_low": 850.0,
-      "week_52_high": 2073.99,
       "estimated_annual_income": 60.0,
-      "daily_change": -398.55
+      "daily_change": -398.55,
+      "week_52_low": 850.0,
+      "week_52_high": 2073.99
     },
     {
       "symbol": "COST",
@@ -116,10 +121,10 @@
       "market_value": 164074.5,
       "total_cost": 59124.43,
       "unrealized_gain": 104950.07,
-      "week_52_low": 844.06,
-      "week_52_high": 1123.67,
       "estimated_annual_income": 882.0,
-      "daily_change": -418.5
+      "daily_change": -418.5,
+      "week_52_low": 844.06,
+      "week_52_high": 1123.67
     },
     {
       "symbol": "XOM",
@@ -130,10 +135,10 @@
       "market_value": 79465.0,
       "total_cost": 35253.38,
       "unrealized_gain": 44211.62,
-      "week_52_low": 114.19,
-      "week_52_high": 188.5,
       "estimated_annual_income": 2140.0,
-      "daily_change": -825.0
+      "daily_change": -825.0,
+      "week_52_low": 114.19,
+      "week_52_high": 188.5
     },
     {
       "symbol": "FDX",
@@ -144,10 +149,10 @@
       "market_value": 31464.0,
       "total_cost": 24837.57,
       "unrealized_gain": 6626.43,
-      "week_52_low": 211.92,
-      "week_52_high": 345.37,
       "estimated_annual_income": 488.0,
-      "daily_change": -367.0
+      "daily_change": -367.0,
+      "week_52_low": 211.92,
+      "week_52_high": 345.37
     },
     {
       "symbol": "FTNT",
@@ -158,10 +163,10 @@
       "market_value": 39438.0,
       "total_cost": 18212.15,
       "unrealized_gain": 21225.85,
-      "week_52_low": 73.55,
-      "week_52_high": 197.13,
       "estimated_annual_income": 0.0,
-      "daily_change": -105.0
+      "daily_change": -105.0,
+      "week_52_low": 73.55,
+      "week_52_high": 197.13
     },
     {
       "symbol": "IESC",
@@ -172,10 +177,10 @@
       "market_value": 12517.5,
       "total_cost": 27685.58,
       "unrealized_gain": -15168.08,
-      "week_52_low": 142.66,
-      "week_52_high": 408.26,
       "estimated_annual_income": 0.0,
-      "daily_change": 63.75
+      "daily_change": 63.75,
+      "week_52_low": 142.66,
+      "week_52_high": 408.26
     },
     {
       "symbol": "QQQ",
@@ -186,10 +191,10 @@
       "market_value": 64504.0,
       "total_cost": 45584.0,
       "unrealized_gain": 18920.0,
-      "week_52_low": 555.6,
-      "week_52_high": 762.86,
       "estimated_annual_income": 309.0,
-      "daily_change": -1447.0
+      "daily_change": -1447.0,
+      "week_52_low": 555.6,
+      "week_52_high": 762.86
     },
     {
       "symbol": "JPM",
@@ -200,10 +205,10 @@
       "market_value": 48033.0,
       "total_cost": 17749.89,
       "unrealized_gain": 30283.11,
-      "week_52_low": 279.1,
-      "week_52_high": 366.5,
       "estimated_annual_income": 990.0,
-      "daily_change": -583.5
+      "daily_change": -583.5,
+      "week_52_low": 279.1,
+      "week_52_high": 366.5
     },
     {
       "symbol": "MSFT",
@@ -214,10 +219,10 @@
       "market_value": 69762.0,
       "total_cost": 61840.49,
       "unrealized_gain": 7921.51,
-      "week_52_low": 349.2,
-      "week_52_high": 559.15,
       "estimated_annual_income": 548.0,
-      "daily_change": -1398.6
+      "daily_change": -1398.6,
+      "week_52_low": 349.2,
+      "week_52_high": 559.15
     },
     {
       "symbol": "NFLX",
@@ -228,10 +233,10 @@
       "market_value": 31568.4,
       "total_cost": 58834.98,
       "unrealized_gain": -27266.58,
-      "week_52_low": 58.19,
-      "week_52_high": 111.1,
       "estimated_annual_income": 0.0,
-      "daily_change": -734.4
+      "daily_change": -734.4,
+      "week_52_low": 58.18,
+      "week_52_high": 111.1
     },
     {
       "symbol": "NVDA",
@@ -242,10 +247,10 @@
       "market_value": 72990.0,
       "total_cost": 29713.28,
       "unrealized_gain": 43276.72,
-      "week_52_low": 145.71,
-      "week_52_high": 243.37,
       "estimated_annual_income": 500.0,
-      "daily_change": -2490.0
+      "daily_change": -2490.0,
+      "week_52_low": 145.71,
+      "week_52_high": 243.37
     },
     {
       "symbol": "PLTR",
@@ -256,10 +261,10 @@
       "market_value": 7684.0,
       "total_cost": 7904.0,
       "unrealized_gain": -220.0,
-      "week_52_low": 106.37,
-      "week_52_high": 212.94,
       "estimated_annual_income": 0.0,
-      "daily_change": -149.5
+      "daily_change": -149.5,
+      "week_52_low": 106.37,
+      "week_52_high": 212.94
     },
     {
       "symbol": "SCHW",
@@ -270,10 +275,10 @@
       "market_value": 27636.0,
       "total_cost": 25323.2,
       "unrealized_gain": 2312.8,
-      "week_52_low": 83.96,
-      "week_52_high": 114.53,
       "estimated_annual_income": 384.0,
-      "daily_change": -132.0
+      "daily_change": -132.0,
+      "week_52_low": 83.96,
+      "week_52_high": 114.53
     },
     {
       "symbol": "SAIC",
@@ -284,10 +289,10 @@
       "market_value": 42999.0,
       "total_cost": 34847.0,
       "unrealized_gain": 8152.0,
-      "week_52_low": 81.08,
-      "week_52_high": 155.11,
       "estimated_annual_income": 444.0,
-      "daily_change": -1113.0
+      "daily_change": -1113.0,
+      "week_52_low": 81.08,
+      "week_52_high": 155.11
     },
     {
       "symbol": "SOFI",
@@ -298,10 +303,10 @@
       "market_value": 6765.0,
       "total_cost": 8129.95,
       "unrealized_gain": -1364.95,
-      "week_52_low": 13.52,
-      "week_52_high": 30.42,
       "estimated_annual_income": 0.0,
-      "daily_change": -290.0
+      "daily_change": -290.0,
+      "week_52_low": 13.52,
+      "week_52_high": 30.42
     },
     {
       "symbol": "UNTY",
@@ -312,10 +317,10 @@
       "market_value": 22652.0,
       "total_cost": 19021.73,
       "unrealized_gain": 3630.27,
-      "week_52_low": 47.42,
-      "week_52_high": 62.5,
       "estimated_annual_income": 272.0,
-      "daily_change": -168.0
+      "daily_change": -168.0,
+      "week_52_low": 47.42,
+      "week_52_high": 62.5
     },
     {
       "symbol": "VRT",
@@ -326,10 +331,10 @@
       "market_value": 46247.5,
       "total_cost": 37836.35,
       "unrealized_gain": 8411.15,
-      "week_52_low": 147.82,
-      "week_52_high": 379.93,
       "estimated_annual_income": 63.0,
-      "daily_change": -2372.5
+      "daily_change": -2372.5,
+      "week_52_low": 147.82,
+      "week_52_high": 379.93
     },
     {
       "symbol": "V",
@@ -340,15 +345,10 @@
       "market_value": 60337.5,
       "total_cost": 23737.82,
       "unrealized_gain": 36599.68,
-      "week_52_low": 293.89,
-      "week_52_high": 442.23,
       "estimated_annual_income": 468.0,
-      "daily_change": -1945.5
+      "daily_change": -1945.5,
+      "week_52_low": 293.89,
+      "week_52_high": 442.23
     }
-  ],
-  "estimated_annual_income": 10618.0,
-  "estimated_income_yield": 0.007797993685945859,
-  "daily_holdings_change": -24833.3,
-  "daily_holdings_change_percent": -0.017924964793637664,
-  "holdings_digest": "b406e927af79066320249bb3e5bf6e727e5a750ab17d8d82846d3b84fb9be525"
+  ]
 }
