@@ -119,7 +119,7 @@ fetch('data/portfolio.json', { cache: 'no-store' }).then(response => {
     const symbols = data.positions.map(position => position.symbol).sort();
     if (analysis.price_date !== data.price_date || analysis.statement_date !== data.statement_date ||
         JSON.stringify(analysis.symbols) !== JSON.stringify(symbols)) throw new Error('Historical analysis does not match portfolio');
-    for (const [id, value] of [['portfolio-beta', analysis.risk?.beta], ['portfolio-sharpe', analysis.risk?.sharpe]]) {
+    for (const [id, value] of [['portfolio-beta', analysis.risk?.beta], ['portfolio-sharpe', analysis.estimated_sharpe?.sharpe]]) {
       text(id, Number.isFinite(value) ? value.toFixed(2) : 'Unavailable');
     }
   }).catch(error => {

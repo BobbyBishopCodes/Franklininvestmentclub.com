@@ -8,10 +8,23 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from analyze_portfolio import monthly_risk
+from analyze_portfolio import monthly_risk, weekly_estimate
 
 
 class PortfolioRiskTests(unittest.TestCase):
+    def test_weekly_estimate_independent_reference(self):
+        dates = pd.date_range(end='2026-10-30', periods=53, freq='W-FRI')
+        returns = np.tile([-.01, .02, .005, -.003], 13)
+        prices = np.r_[100, 100 * np.cumprod(1 + returns)]
+        history = pd.DataFrame({'ALPH': prices}, index=dates)
+        result = weekly_estimate(history, {'ALPH': .9}, '2026-10-31')
+        rf = 1.0416 ** (1 / 52) - 1
+        expected = [.9 * float(r) - rf for r in returns]
+        self.assertAlmostEqual(result['sharpe'], math.sqrt(52) * statistics.mean(expected) / statistics.stdev(expected), places=12)
+        self.assertAlmostEqual(result['compounded_annual_return'], math.prod(1 + .9 * float(r) for r in returns) - 1)
+        self.assertEqual(result['observations'], 52)
+        self.assertEqual(weekly_estimate(history.iloc[:-1], {'ALPH': 1}, '2026-10-31')['status'], 'unavailable')
+
     def test_identical_holding_and_benchmark_have_unit_beta(self):
         months = pd.date_range("2023-10-31", periods=37, freq="ME")
         returns = np.array([0.01 + (i % 5 - 2) * 0.006 for i in range(36)])

@@ -14,11 +14,50 @@ import numpy as np
 import pandas as pd
 import scipy.cluster.hierarchy as hierarchy
 from scipy.spatial.distance import squareform
+from refresh_portfolio import load_holdings
 import yfinance as yf
 
 ROOT = Path(__file__).resolve().parents[1]
 PORTFOLIO = ROOT / "site/data/portfolio.json"
 OUTPUT = ROOT / "site/data/analysis.json"
+
+
+def weekly_estimate(prices, weights, as_of, annual_risk_free=0.0416):
+    """52 completed Friday weeks, statement weights, zero-return residual cash."""
+    end = pd.Timestamp(as_of)
+    end -= pd.Timedelta(days=(end.weekday() - 4) % 7)
+    endpoints = pd.date_range(end=end, periods=53, freq='W-FRI')
+    symbols = sorted(weights)
+    sampled = []
+    for endpoint in endpoints:
+        available = prices.loc[prices.index <= endpoint, symbols]
+        if available.empty or (endpoint - available.index[-1]).days > 3:
+            return {'status': 'unavailable', 'sharpe': None, 'reason': 'Missing weekly close'}
+        sampled.append(available.iloc[-1])
+    closes = pd.DataFrame(sampled, index=endpoints)
+    if not np.isfinite(closes.to_numpy()).all() or (closes <= 0).any().any():
+        return {'status': 'unavailable', 'sharpe': None, 'reason': 'Invalid weekly prices'}
+    if any(not math.isfinite(w) or w < 0 for w in weights.values()) or sum(weights.values()) > 1 + 1e-9:
+        raise ValueError('Invalid weekly portfolio weights')
+    returns = closes.pct_change(fill_method=None).iloc[1:].to_numpy() @ np.array([weights[s] for s in symbols])
+    weekly_rf = (1 + annual_risk_free) ** (1 / 52) - 1
+    excess = returns - weekly_rf
+    sd = float(np.std(excess, ddof=1))
+    if sd <= 1e-12:
+        return {'status': 'unavailable', 'sharpe': None, 'reason': 'Zero weekly volatility'}
+    return {'status': 'available', 'reason': None,
+            'sharpe': float(math.sqrt(52) * np.mean(excess) / sd),
+            'compounded_annual_return': float(np.prod(1 + returns) - 1),
+            'annualized_arithmetic_return': float(np.mean(returns) * 52),
+            'annualized_volatility': float(sd * math.sqrt(52)),
+            'annual_risk_free_assumption': annual_risk_free, 'weekly_risk_free': weekly_rf,
+            'method': 'Statement weights rebalanced weekly; adjusted closes; cash earns zero; gross of costs',
+            'window_start': endpoints[0].date().isoformat(), 'window_end': endpoints[-1].date().isoformat(),
+            'observations': 52, 'weights': weights, 'cash_weight': 1 - sum(weights.values()),
+            'initial_adjusted_closes': {s: float(closes.iloc[0][s]) for s in symbols},
+            'weekly_audit': [{'week_end': endpoints[i + 1].date().isoformat(),
+                              'portfolio_return': float(returns[i]), 'excess_return': float(excess[i]),
+                              'adjusted_closes': {s: float(closes.iloc[i + 1][s]) for s in symbols}} for i in range(52)]}
 
 
 def treasury_history():
@@ -105,6 +144,10 @@ def build():
     weights = {position["symbol"]: position["market_value"] / portfolio["total_value"]
                for position in portfolio["positions"]}
     risk = monthly_risk(prices, treasury, weights, price_date)
+    holdings = load_holdings()
+    statement_values = {h['symbol']: float(h['shares'] * h['statement_price']) for h in holdings}
+    statement_total = sum(statement_values.values()) + portfolio['cash']
+    estimate = weekly_estimate(prices, {s: v / statement_total for s, v in statement_values.items()}, portfolio['statement_date'])
 
     start = pd.Timestamp(price_date) - pd.Timedelta(days=3 * 365 + 2)
     daily = prices.loc[prices.index >= start, symbols].pct_change(fill_method=None).dropna()
@@ -130,7 +173,7 @@ def build():
     document = {
         "price_date": price_date, "statement_date": portfolio["statement_date"],
         "symbols": symbols, "source": "Yahoo Finance adjusted closes; FRED DGS3MO investment-basis Treasury yield",
-        "risk": risk,
+        "risk": risk, "estimated_sharpe": estimate,
         "correlation": {"start_date": daily.index[0].date().isoformat(),
                         "end_date": daily.index[-1].date().isoformat(), "observations": len(daily),
                         "matrix": correlation.tolist(), "leaf_order": hierarchy.leaves_list(linkage).tolist(),

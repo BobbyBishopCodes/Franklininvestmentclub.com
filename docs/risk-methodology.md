@@ -1,5 +1,38 @@
 # Portfolio risk estimates
 
+## Displayed Sharpe: one-year weekly reconstruction
+
+The website now uses `estimated_sharpe` from the generated analysis JSON. The
+three-year monthly calculation below remains the beta model and a stored
+comparison; its Sharpe is no longer displayed.
+
+The displayed estimate uses the latest statement's shares times statement prices,
+divided by statement portfolio value including cash, as fixed target weights.
+Use 53 Friday endpoints ending on or before the statement date, producing 52
+weekly returns. For holiday Fridays, use the preceding available trading close
+within three calendar days; missing/nonfinite holding prices make the estimate
+unavailable. Prices are adjusted for dividends and splits. Rebalance weekly,
+assume cash earns zero, and exclude fees, taxes and transaction costs.
+
+The explicitly assumed effective annual risk-free rate is 4.16%, converted to
+weekly return as (1.0416)^(1/52)-1. This is a fixed modeling assumption, not a
+claim about historical realized Treasury returns or a live Treasury quote.
+Sharpe = sqrt(52) * mean(weekly portfolio return - weekly risk-free return) /
+sample standard deviation(weekly excess returns). Square-root scaling assumes
+uncorrelated weekly excess returns. Compounded 52-week return and annualized
+arithmetic return are separate outputs; CAGR is not substituted into Sharpe.
+
+October 2026 statement reconstruction: October 31, 2025 to October 30, 2026;
+52 returns; Sharpe 1.39558, annualized volatility 10.0921%, compounded return
+19.2877%, annualized arithmetic return 18.1618%. Provider revisions may cause
+small changes. All weights, adjusted endpoint prices and returns are stored in
+`estimated_sharpe.weekly_audit`. A synthetic known-return test independently
+checks Sharpe and compounded return with Python's standard statistics library.
+
+This is a hypothetical estimate with hindsight in the choice of holdings. The
+club's actual YTD share-value return and account-level historical Sharpe are
+different measurements. The supplied 1.32 estimate has not been reproduced.
+
 These figures describe a hypothetical portfolio rebalanced monthly to the latest
 statement holdings at current market weights. They do not measure the club's
 realized account performance. Today's selection introduces hindsight and survivor
